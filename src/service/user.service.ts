@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UserRequest, UserResponse } from 'src/models/user.model';
+import { LoginRequest, UserRequest } from 'src/models/user.model';
 import { v4 as uuidv4 } from 'uuid';
 import { generateToken } from 'utils/jwt';
-import { hashPassword } from 'utils/password';
+import { comparePasswords, hashPassword } from 'utils/password';
 import { User } from 'dto/user.dto';
-import { UserRepository } from 'repository/user.repository';
+import { UserRepository } from 'src/repository/user.repository';
 
 @Injectable()
 export class UserService {
-  private users: UserResponse[] = [];
   constructor(private userRepository: UserRepository) {}
 
   async register(user: UserRequest) {
@@ -22,14 +21,6 @@ export class UserService {
       }
       const id = uuidv4();
       const hashedPassword = await hashPassword(user.password);
-      //   const newUser: UserResponse = {
-      //     id,
-      //     email: user.email,
-      //     name: user.name,
-      //     password: hashedPassword,
-      //     user_id: user.name + '-' + id,
-      //     created_at: new Date(),
-      //   };
       const newUser: User = {
         email: user.email,
         password: hashedPassword,
@@ -38,7 +29,6 @@ export class UserService {
       };
 
       await this.userRepository.save(newUser);
-      console.log(newUser);
 
       const token = generateToken(newUser.user_id, newUser.email);
       return { message: 'User registered successfully', token };
@@ -46,5 +36,31 @@ export class UserService {
       console.error('Error registering user:', error);
       throw new Error('Failed to register user');
     }
+  }
+
+  async login(req: LoginRequest) {
+    const foundUser = await this.userRepository.findByEmail(req.email);
+    if (!foundUser) {
+      return {
+        message: 'Correo no se encuentra registrado.',
+        token: null,
+      };
+    }
+
+    const passwordMatch = await comparePasswords(
+      req.password,
+      foundUser.password,
+    );
+    if (!passwordMatch) {
+      return {
+        message: 'Contraseña incorrecta.',
+        token: null,
+      };
+    }
+
+    return {
+      message: 'Login successful',
+      token: generateToken(foundUser.user_id, foundUser.email),
+    };
   }
 }

@@ -5,7 +5,9 @@ import { UsersController } from './controller/users.controller';
 import { UserService } from './service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'dto/user.dto';
-import { UserRepository } from 'repository/user.repository';
+import { UserRepository } from 'src/repository/user.repository';
+import { Task } from 'dto/task.dto';
+import { TaskRepository } from 'src/repository/task.repository';
 
 @Module({
   imports: [
@@ -19,9 +21,9 @@ import { UserRepository } from 'repository/user.repository';
       autoLoadEntities: true,
       synchronize: false,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Task]),
   ],
   controllers: [TasksController, UsersController],
-  providers: [TasksService, UserService, UserRepository],
+  providers: [TasksService, UserService, UserRepository, TaskRepository],
 })
 export class AppModule {}

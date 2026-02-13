@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { TaskRepository } from 'src/repository/task.repository';
 import { TaskRequest, TaskResponse } from 'src/models/task.model';
+import Decimal from 'decimal.js';
 
 @Injectable()
 export class TasksService {
-  private tasks: TaskResponse[] = [];
+  constructor(private taskRepository: TaskRepository) {}
 
-  public calculate(request: TaskRequest): TaskResponse {
-    const response: TaskResponse = {
-      id: this.tasks.length + 1,
-      operation: request.operation,
-      operandA: request.operandA,
-      operandB: request.operandB,
-      result: this.performCalculation(
+  public async calculate(request: TaskRequest): Promise<TaskResponse> {
+    try {
+      const result = this.performCalculation(
         request.operation,
         request.operandA,
         request.operandB,
-      ),
-      timestampt: new Date(),
-      user_id: request.user_id,
-    };
-    this.tasks.push(response);
-    return response;
+      );
+
+      const savedTask = await this.taskRepository.save(request, result);
+      const response: TaskResponse = {
+        id: savedTask.id,
+        user_id: request.user_id,
+        operation: request.operation,
+        operandA: request.operandA,
+        operandB: request.operandB,
+        result: result,
+        timestamp: savedTask.created_at,
+      };
+      return response;
+    } catch (error) {
+      console.error('Error performing calculation:', error);
+      throw new Error('Failed to perform calculation');
+    }
   }
 
   private performCalculation(
@@ -28,20 +37,37 @@ export class TasksService {
     operandA: number,
     operandB: number,
   ): number {
+    const a = new Decimal(operandA);
+    const b = new Decimal(operandB);
+    let result;
+
     switch (operation) {
       case 'ADDITION':
-        return operandA + operandB;
+        result = a.plus(b);
+        break;
       case 'SUBTRACTION':
-        return operandA - operandB;
+        result = a.minus(b);
+        break;
       case 'MULTIPLICATION':
-        return operandA * operandB;
+        result = a.times(b);
+        break;
       case 'DIVISION':
-        if (operandB === 0) {
+        if (b.isZero()) {
           throw new Error('Division by zero is not allowed');
         }
-        return operandA / operandB;
+        result = a.dividedBy(b);
+        break;
+      case 'SQUARE_ROOT':
+        if (a.isNegative()) {
+          throw new Error('Cannot calculate square root of a negative number');
+        }
+        result = a.sqrt();
+        break;
       default:
         throw new Error(`Unsupported operation: ${operation}`);
     }
+
+    // Redondear a 2 decimales
+    return result.toDecimalPlaces(2).toNumber();
   }
 }

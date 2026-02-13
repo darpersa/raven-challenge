@@ -1,13 +1,14 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserRequest } from 'src/models/user.model';
+import { Body, Controller, Post } from '@nestjs/common';
+import { LoginRequest, UserRequest } from 'src/models/user.model';
 import { UserService } from 'src/service/user.service';
 
 @Controller('auth')
 export class UsersController {
   constructor(private userService: UserService) {}
-  @Get('login')
-  login() {
-    return 'Login endpoint';
+
+  @Post('login')
+  async login(@Body() request: LoginRequest) {
+    return await this.userService.login(request);
   }
 
   @Post('register')

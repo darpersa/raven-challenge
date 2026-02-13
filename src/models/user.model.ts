@@ -4,11 +4,7 @@ export interface UserRequest {
   name: string;
 }
 
-export interface UserResponse {
-  id: string;
+export interface LoginRequest {
   email: string;
-  name: string;
-  user_id: string;
   password: string;
-  created_at: Date;
 }

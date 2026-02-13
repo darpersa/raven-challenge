@@ -4,7 +4,7 @@ export interface TaskResponse {
   operandA: number;
   operandB: number;
   result: number;
-  timestampt: Date;
+  timestamp: Date;
   user_id: string;
 }
 
