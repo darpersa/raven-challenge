@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TasksController } from './controller/tasks.controller';
 import { TasksService } from './service/tasks.service';
 import { UsersController } from './controller/users.controller';
@@ -10,9 +11,14 @@ import { Task } from 'dto/task.dto';
 import { TaskRepository } from 'src/repository/task.repository';
 import { HistoryController } from './controller/history.controller';
 import { HistoryService } from './service/history.service';
+import { MailboxService } from './external/mailbox.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRoot({
       type: (process.env.DB_TYPE as any) || 'postgres',
       host: process.env.DB_HOST || '127.0.0.1',
@@ -30,6 +36,7 @@ import { HistoryService } from './service/history.service';
     TasksService,
     UserService,
     HistoryService,
+    MailboxService,
     UserRepository,
     TaskRepository,
   ],
