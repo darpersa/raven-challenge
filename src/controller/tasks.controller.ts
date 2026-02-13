@@ -4,11 +4,7 @@ import { TasksService } from 'src/service/tasks.service';
 
 @Controller('calculate')
 export class TasksController {
-  private tasksService: TasksService;
-
-  constructor(tasksService: TasksService) {
-    this.tasksService = tasksService;
-  }
+  constructor(private tasksService: TasksService) {}
 
   @Post()
   calculate(@Body() request: TaskRequest) {

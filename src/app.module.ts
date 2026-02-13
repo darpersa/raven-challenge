@@ -8,6 +8,8 @@ import { User } from 'dto/user.dto';
 import { UserRepository } from 'src/repository/user.repository';
 import { Task } from 'dto/task.dto';
 import { TaskRepository } from 'src/repository/task.repository';
+import { HistoryController } from './controller/history.controller';
+import { HistoryService } from './service/history.service';
 
 @Module({
   imports: [
@@ -23,7 +25,13 @@ import { TaskRepository } from 'src/repository/task.repository';
     }),
     TypeOrmModule.forFeature([User, Task]),
   ],
-  controllers: [TasksController, UsersController],
-  providers: [TasksService, UserService, UserRepository, TaskRepository],
+  controllers: [TasksController, UsersController, HistoryController],
+  providers: [
+    TasksService,
+    UserService,
+    HistoryService,
+    UserRepository,
+    TaskRepository,
+  ],
 })
 export class AppModule {}
