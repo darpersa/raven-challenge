@@ -1,20 +1,24 @@
 import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
-import { LoginRequest, UserRequest } from 'src/models/user.model';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { LoginRequestDto, RegisterRequestDto } from 'src/dto/user.dto';
 import { UserService } from 'src/service/user.service';
 
+@ApiTags('Raven')
 @Controller('auth')
 export class UsersController {
   constructor(private userService: UserService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() request: LoginRequest) {
+  @ApiOperation({ summary: 'Login de usuario' })
+  async login(@Body() request: LoginRequestDto) {
     return await this.userService.login(request);
   }
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() request: UserRequest) {
+  @ApiOperation({ summary: 'Registro de usuario' })
+  async register(@Body() request: RegisterRequestDto) {
     return await this.userService.register(request);
   }
 }

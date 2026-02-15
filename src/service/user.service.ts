@@ -1,11 +1,12 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { LoginRequest, UserRequest } from 'src/models/user.model';
+import { LoginRequest } from 'src/models/user.model';
 import { v4 as uuidv4 } from 'uuid';
 import { generateToken } from 'utils/jwt';
 import { comparePasswords, hashPassword } from 'utils/password';
-import { User } from 'dto/user.dto';
+import { User } from 'src/repository/dto/user.dto';
 import { UserRepository } from 'src/repository/user.repository';
 import { MailboxService } from 'src/external/mailbox.service';
+import { RegisterRequestDto } from 'src/dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -14,7 +15,7 @@ export class UserService {
     private mailBoxService: MailboxService,
   ) {}
 
-  async register(user: UserRequest) {
+  async register(user: RegisterRequestDto) {
     try {
       const isValidEmail = await this.validateEmail(user.email);
       if (!isValidEmail.isValid) {
@@ -39,14 +40,18 @@ export class UserService {
       const newUser: User = {
         email: user.email,
         password: hashedPassword,
-        username: user.name,
-        user_id: user.name + '-' + id,
+        username: user.username,
+        user_id: user.username + '-' + id,
       };
 
       await this.userRepository.save(newUser);
 
-      const token = generateToken(newUser.user_id, newUser.email);
-      return { message: 'User registered successfully', token };
+      const token = generateToken(newUser.id, newUser.user_id);
+      return {
+        message: 'User registered successfully',
+        token,
+        user_id: newUser.user_id,
+      };
     } catch (error) {
       console.error('Error registering user:', error);
       if (error instanceof HttpException) {
@@ -75,7 +80,8 @@ export class UserService {
 
     return {
       message: 'Login successful',
-      token: generateToken(foundUser.user_id, foundUser.email),
+      token: generateToken(foundUser.id, foundUser.user_id),
+      user_id: foundUser.user_id,
     };
   }
 

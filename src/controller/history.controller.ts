@@ -1,38 +1,56 @@
-import { Controller, Delete, Get, Headers, Param } from '@nestjs/common';
-import { HistoryRequest } from 'src/models/history.model';
+import {
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  Param,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
+import { JwtValidationGuard } from 'src/guards/auth.guards';
+import { HistoryQueryDto } from 'src/dto/history.dto';
 import { HistoryService } from 'src/service/history.service';
 
+@ApiTags('Raven')
 @Controller('history')
 export class HistoryController {
   constructor(private historyService: HistoryService) {}
+
   @Get()
+  @UseGuards(JwtValidationGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Obtener historial de operaciones' })
   getHistory(
     @Headers('user_id') userId: string,
-    @Headers('operation') operation: string,
-    @Headers('start_date') startDate: string,
-    @Headers('end_date') endDate: string,
-    @Headers('page') page: number,
-    @Headers('limit') limit: number,
-    @Headers('order') order: string,
+    @Query() query: HistoryQueryDto,
   ) {
-    const request: HistoryRequest = {
+    const request = {
       userId,
-      operation,
-      startDate,
-      endDate,
-      page,
-      limit,
-      order,
+      operation: query.operation,
+      startDate: query.start_date,
+      endDate: query.end_date,
+      page: query.page || 1,
+      limit: query.limit || 10,
+      order: query.order || 'ASC',
     };
     return this.historyService.getHistory(request);
   }
+
   @Get('/:id')
-  getTaskById(@Param('id') id: number) {
+  @UseGuards(JwtValidationGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Obtener tarea por ID' })
+  getTaskById(@Param('id', ParseIntPipe) id: number) {
     return this.historyService.getTaskById(id);
   }
 
   @Delete('/:id')
-  deleteTaskById(@Param('id') id: number) {
+  @UseGuards(JwtValidationGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Eliminar tarea por ID' })
+  deleteTaskById(@Param('id', ParseIntPipe) id: number) {
     return this.historyService.deleteTaskById(id);
   }
 }

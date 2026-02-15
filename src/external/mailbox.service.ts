@@ -51,7 +51,6 @@ export class MailboxService {
       }
 
       const data: MailboxLayerResponse = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error('Error validando email:', error);

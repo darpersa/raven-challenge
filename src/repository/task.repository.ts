@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from 'dto/task.dto';
+import { Task } from 'src/repository/dto/task.dto';
 import { Between, MoreThanOrEqual, Repository } from 'typeorm';
 import { UserRepository } from './user.repository';
 import { TaskRequest } from 'src/models/task.model';
