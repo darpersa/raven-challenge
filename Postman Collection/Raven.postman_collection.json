@@ -1,0 +1,286 @@
+{
+  "info": {
+    "_postman_id": "8b69098f-21f4-4d23-8c9c-ecf4eb5e107f",
+    "name": "Raven",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "3439324"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"manuel471@gmail.com\",\n    \"password\": \"somePassword\",\n    \"username\": \"manuel\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"manuel471@gmail.com\",\n    \"password\": \"somePassword\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Calculate",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcl9pZCI6Im1hbnVlbC0xZDM3ZDUxMC1jYjUzLTQ1YjMtYTNmZS04M2VjZmYxZWFhNjMiLCJpYXQiOjE3NzExOTMxOTMsImV4cCI6MTc3MTI3OTU5M30.XDFFLx3klYsIdfkt0gsvwW2RUoD4YNmbdukMxnjLS0o",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": \"manuel-1d37d510-cb53-45b3-a3fe-83ecff1eaa63\",\n    \"operation\": \"SUBTRACTION\",\n    \"operandA\": -1000000,\n    \"operandB\": 3.8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/calculate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "calculate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "History",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcl9pZCI6Im1hbnVlbC0xZDM3ZDUxMC1jYjUzLTQ1YjMtYTNmZS04M2VjZmYxZWFhNjMiLCJpYXQiOjE3NzExOTMxOTMsImV4cCI6MTc3MTI3OTU5M30.XDFFLx3klYsIdfkt0gsvwW2RUoD4YNmbdukMxnjLS0o",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "user_id",
+            "value": "manuel-1d37d510-cb53-45b3-a3fe-83ecff1eaa63",
+            "type": "text"
+          },
+          {
+            "key": "operation",
+            "value": "ADDITION",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "start_date",
+            "value": "2026-02-13",
+            "type": "text"
+          },
+          {
+            "key": "end_date",
+            "value": "2026-02-14",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"email@gmail.com\",\n    \"password\": \"somePassword\",\n    \"name\": \"testName\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/history",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "history"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "History By ID",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "user_id",
+            "value": "testName-858c7e0c-70c0-4078-af2a-6eeaeba8a228",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "operation",
+            "value": "ADDITION",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "start_date",
+            "value": "2026-02-13",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "end_date",
+            "value": "2026-02-14",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"email@gmail.com\",\n    \"password\": \"somePassword\",\n    \"name\": \"testName\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/history/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "history",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete History By ID",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "user_id",
+            "value": "testName-858c7e0c-70c0-4078-af2a-6eeaeba8a228",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "operation",
+            "value": "ADDITION",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "start_date",
+            "value": "2026-02-13",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "end_date",
+            "value": "2026-02-14",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"email@gmail.com\",\n    \"password\": \"somePassword\",\n    \"name\": \"testName\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/history/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "history",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

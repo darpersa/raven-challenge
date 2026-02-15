@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken';
 
 export const generateToken = (id: number, user_id: string): string => {
   return jwt.sign({ id, user_id }, process.env.JWT_SECRET || 'default-secret', {
-    expiresIn: process.env.JWT_EXPIRE || '24h',
+    expiresIn: process.env.JWT_EXPIRE || '1h',
   } as jwt.SignOptions);
 };
 
